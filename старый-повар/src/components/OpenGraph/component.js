@@ -8,6 +8,7 @@ function OpenGraphComponent({ title, description }) {
       <meta property="twitter:title" content={title}/>
 
       <meta property="description" content={description}/>
+      <meta name="description" content={description}/>
       <meta itemProp="description" content={description}/>
       <meta property="og:description" content={description}/>
       <meta property="twitter:description" content={description}/>
