@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+article {
+  @apply font-sans text-lg bg-slate-300 text-slate-700 p-4 sm:p-8 pt-3;
+}
+
+article h1 {
+  @apply text-3xl text-slate-800 font-semibold;
+}
+
+article h2 {
+  @apply text-2xl text-slate-800 font-normal;
+}
+
+article h3 {
+  @apply text-xl text-slate-800 font-normal;
+}
+
+article a {
+  @apply text-slate-900 underline;
+}
+
+article img {
+  @apply p-4 h-full w-full ml-auto mr-auto;
+  @apply md:w-[480px];
+}
+
+article p {
+  @apply p-4 w-full;
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+article code {
+  @apply rounded bg-slate-400 p-1 m-1 text-slate-600;
+}
+
+header {
+  @apply text-slate-900 font-mono text-lg sm:text-4xl p-2 bg-gradient-to-b from-slate-300 to-slate-200 mb-[-1rem] opacity-75;
+  backdrop-filter: blur(10px);
+}
+
+header a {
+  @apply underline opacity-100;
+}
+
+main {
+  @apply bg-slate-300 h-full p-2;
+}
+
+.article-card {
+  @apply bg-slate-200 p-4 sm:p-8 rounded w-full mt-3 shadow shadow-slate-500 transition-all duration-500;
+}
+
+.article-card:hover {
+  @apply shadow-slate-700 bg-slate-100;
+}
+
+.article-card h2 {
+  @apply underline text-slate-900 font-semibold;
+}
+
