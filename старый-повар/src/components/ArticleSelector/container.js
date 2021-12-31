@@ -19,10 +19,13 @@ function ArticleSelectorContainer(props) {
       description: shortDescription,
     })
   }
+  const sortedArticles = articles.sort(
+    (i, j) => Number(j.id) - Number(i.id)
+  )
 
   return (
     <ArticleSelectorComponent
-      articles={articles}
+      articles={sortedArticles}
     />
   )
 }

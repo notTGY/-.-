@@ -51,7 +51,8 @@ main {
 }
 
 .article-card {
-  @apply bg-slate-200 p-4 sm:p-8 rounded w-full mt-3 shadow shadow-slate-500 transition-all duration-500;
+  @apply bg-slate-200 p-4 sm:p-8 rounded w-full mt-3 shadow shadow-slate-500;
+  @apply transition-shadow transition-colors duration-500;
 }
 
 .article-card:hover {

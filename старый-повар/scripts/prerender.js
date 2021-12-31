@@ -3,9 +3,9 @@ const React = require('react')
 const ReactDOMServer = require('react-dom/server')
 const { StaticRouter } = require('react-router-dom/server')
 
-async function prerender() {
+async function prerender(OUT_DIR, POSTS_DIR) {
   const App = require('../src/App').default
-  const mdfile = require('../posts/posts.json')
+  const mdfile = require(`../${POSTS_DIR}/posts.json`)
 
   async function renderLoc(url = "") {
     const react = ReactDOMServer.renderToString(
@@ -16,13 +16,13 @@ async function prerender() {
 
     const renderedHTML = `<!DOCTYPE html><html lang="ru" class="h-full">${react}</html>`
 
-    if (!fs.existsSync(`dist/${url}`))
-      fs.mkdirSync(`dist/${url}`, {recursive: true})
+    if (!fs.existsSync(`${OUT_DIR}/${url}`))
+      fs.mkdirSync(`${OUT_DIR}/${url}`, {recursive: true})
 
     fs.writeFileSync(
       url
-      ? `dist/${url}/index.html`
-      : 'dist/index.html',
+      ? `${OUT_DIR}/${url}/index.html`
+      : `${OUT_DIR}/index.html`,
       renderedHTML,
     )
   }
@@ -37,8 +37,8 @@ async function prerender() {
   console.log('prerender finished')
 }
 
-function start() {
-  prerender()
+function start(...args) {
+  prerender(...args)
 }
 
 module.exports = start

@@ -1,76 +1,92 @@
 const path = require('path')
 const fs = require('fs')
 const CWebp = require('cwebp').CWebp
-const { build } = require('esbuild')
+const { build: esbuild } = require('esbuild')
 
-async function transformMd(obj, file) {
-  const id = file.replace(/\.md$/, '')
-  obj[id] = (await fs.promises.readFile(
-    `posts/${file}`
-  )).toString()
-}
+const OUT_DIR = "docs"
+const POSTS_DIR = "posts"
+
 async function createJSON() {
-  const dir = fs.readdirSync('posts')
-  const obj = {}
+  const outJSON = {}
+  const dir = fs.readdirSync(POSTS_DIR)
+
   const proms = dir.map(file => {
-    if (!file.match(/.md$/g)) return
-    return transformMd(obj, file)
+    if (file.match(/.md$/g))
+      return new Promise(res => {
+        const id = file.replace(/\.md$/, '')
+        fs.promises.readFile(`${POSTS_DIR}/${file}`)
+          .then(data => {
+              res(outJSON[id] = data.toString())
+            }
+          )
+      })
   })
+
   await Promise.all(proms)
-  const json = JSON.stringify(obj)
-  fs.writeFileSync('posts/posts.json', json)
+
+  fs.writeFileSync(
+    `${POSTS_DIR}/posts.json`,
+    JSON.stringify(outJSON)
+  )
 }
 
-async function copyStatic() {
-  const dir = fs.readdirSync('static')
+function genPathToOutDir(dir) {
+}
 
-  const dir2 = fs.readdirSync('public')
-
-  if (!fs.existsSync('dist/static'))
-    fs.mkdirSync('dist/static', {recursive: true})
+async function compileStatic(folder) {
+  const dir = fs.readdirSync(folder)
 
   const proms = dir.map(file => {
+    const pathToFile = `${folder}/${file}`
+
+    /**
+     * Omit first directory ('public/')
+     */
+    const rest = folder.substring(
+      `${folder}/`.indexOf`/` + 1
+    )
+    const outDir = `${OUT_DIR}/${rest}`
+    
+    if (fs.lstatSync(pathToFile).isDirectory())
+      return compileStatic(pathToFile)
+
+    if (!fs.existsSync(outDir))
+      fs.mkdirSync(outDir, { recursive: true })
+
     if (file.match(/\.jpg$/g)) {
-      const encoder = new CWebp(`static/${file}`)
+      const encoder = new CWebp(pathToFile)
       const newFile = file.replace(/\.jpg$/g, '.webp')
-      return encoder.write(`dist/static/${newFile}`)
+      encoder.write(`${outDir}/${newFile}`)
     }
+
     return fs.promises.copyFile(
-      `static/${file}`, `dist/static/${file}`
+      pathToFile, `${outDir}/${file}`
     )
   })
 
-  const proms2 = dir2.map(file => {
-    return fs.promises.copyFile(
-      `public/${file}`, `dist/${file}`
-    )
-  })
-
-  await Promise.all(proms.concat(proms2))
+  await Promise.all(proms)
 }
 
 
-copyStatic()
+compileStatic('public')
   .then(createJSON)
   .then(() =>
-    build({
+    esbuild({
       entryPoints: ['src/index.js'],
       bundle: true,
       minify: true,
-      outdir: 'dist',
+      outdir: OUT_DIR,
       logLevel: 'info',
       loader: { ".js": "jsx" },
     })
-  ).then(prerender)
+  ).then(() => {
+    require('ignore-styles')
 
-function prerender() {
-  require('ignore-styles')
+    require('@babel/register')({
+      configFile: path.resolve(__dirname, "../babel.config.js")
+    })
 
-  require('@babel/register')({
-    configFile: path.resolve(__dirname, "../babel.config.js")
+    const prerender = require('./prerender.js')
+    prerender(OUT_DIR, POSTS_DIR)
   })
-
-  const prerender = require('./prerender.js')
-  prerender()
-}
 
