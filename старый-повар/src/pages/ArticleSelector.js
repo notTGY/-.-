@@ -4,6 +4,7 @@ import
   ArticleSelectorComponent
 from "../components/ArticleSelector"
 import Header from "../components/Header"
+import GTM from "../components/GTM"
 
 import mdfile from '../../posts/posts.json'
 
@@ -48,6 +49,7 @@ function ArticleSelector() {
       <meta property="og:image" content="./thumbnail.png"/>
 
       <link rel="stylesheet" href="./index.css"/>
+      <GTM/>
     </head>
     <body className="h-full">
       <Header/>

@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import OpenGraph from "../components/OpenGraph"
 import ArticleComponent from "../components/Article"
 import Header from "../components/Header"
+import GTM from "../components/GTM"
 
 import mdfile from '../../posts/posts.json'
 
@@ -30,6 +31,7 @@ function Article() {
       <meta property="og:image" content="../thumbnail.png"/>
 
       <link rel="stylesheet" href="../index.css"/>
+      <GTM/>
     </head>
     <body className="h-full bg-slate-100">
       <Header/>
