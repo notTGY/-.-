@@ -5,8 +5,8 @@
   "main": "src/App.jsx",
   "scripts": {
     "esbuild": "node scripts/esbuild.js",
-    "tailwind": "tailwindcss -i ./src/tailwind.css -o ./docs/index.css",
-    "start": "concurrently \"npm run esbuild\" \"npm run tailwind\""
+    "tailwind": "tailwindcss -i ./src/tailwind.css -o ./docs/index.css && esbuild ./docs/index.css --allow-overwrite --minify --bundle --outdir=docs",
+    "start": "concurrently \"npm run tailwind\" \"npm run esbuild\""
   },
   "author": "",
   "license": "MIT",

@@ -6,7 +6,10 @@ const { build: esbuild } = require('esbuild')
 const OUT_DIR = "docs"
 const POSTS_DIR = "posts"
 
+const allStart = new Date().getTime()
+
 async function createJSON() {
+  const start = new Date().getTime()
   const outJSON = {}
   const dir = fs.readdirSync(POSTS_DIR)
 
@@ -28,12 +31,12 @@ async function createJSON() {
     `${POSTS_DIR}/posts.json`,
     JSON.stringify(outJSON)
   )
-}
-
-function genPathToOutDir(dir) {
+  const delta = (new Date().getTime()) - start
+  console.log('generating JSON took %dms', delta)
 }
 
 async function compileStatic(folder) {
+  const start = new Date().getTime()
   const dir = fs.readdirSync(folder)
 
   const proms = dir.map(file => {
@@ -53,9 +56,10 @@ async function compileStatic(folder) {
     if (!fs.existsSync(outDir))
       fs.mkdirSync(outDir, { recursive: true })
 
-    if (file.match(/\.jpg$/g)) {
+    const imageRegex = /\.(jpg|JPEG|PNG)$/g
+    if (file.match(imageRegex)) {
       const encoder = new CWebp(pathToFile)
-      const newFile = file.replace(/\.jpg$/g, '.webp')
+      const newFile = file.replace(imageRegex, '.webp')
       encoder.write(`${outDir}/${newFile}`)
     }
 
@@ -65,6 +69,8 @@ async function compileStatic(folder) {
   })
 
   await Promise.all(proms)
+  const delta = (new Date().getTime()) - start
+  console.log('copying static took %dms', delta)
 }
 
 
@@ -79,7 +85,8 @@ compileStatic('public')
       logLevel: 'info',
       loader: { ".js": "jsx" },
     })
-  ).then(() => {
+  ).then(async () => {
+    const start = new Date().getTime()
     require('ignore-styles')
 
     require('@babel/register')({
@@ -87,6 +94,11 @@ compileStatic('public')
     })
 
     const prerender = require('./prerender.js')
-    prerender(OUT_DIR, POSTS_DIR)
+    await prerender(OUT_DIR, POSTS_DIR)
+    const delta = (new Date().getTime()) - start
+    console.log('prerender took %dms', delta)
+
+    const allDelta = (new Date().getTime()) - allStart
+    console.log('all took %dms', allDelta)
   })
 

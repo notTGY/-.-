@@ -14,7 +14,7 @@ async function prerender(OUT_DIR, POSTS_DIR) {
       </StaticRouter>
     )
 
-    const renderedHTML = `<!DOCTYPE html><html lang="ru" class="h-full">${react}</html>`
+    const renderedHTML = `<!DOCTYPE html><html lang="ru">${react}</html>`
 
     if (!fs.existsSync(`${OUT_DIR}/${url}`))
       fs.mkdirSync(`${OUT_DIR}/${url}`, {recursive: true})
@@ -33,13 +33,7 @@ async function prerender(OUT_DIR, POSTS_DIR) {
   }
 
   await Promise.all(proms)
-
-  console.log('prerender finished')
 }
 
-function start(...args) {
-  prerender(...args)
-}
-
-module.exports = start
+module.exports = prerender
 
