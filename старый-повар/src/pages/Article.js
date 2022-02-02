@@ -6,7 +6,7 @@ import ArticleComponent from "../components/Article"
 import Header from "../components/Header"
 import GTM from "../components/GTM"
 
-import mdfile from '../../posts/posts.json'
+import mdfile from '../../public/posts/posts.json'
 
 function Article() {
   const params = useParams()

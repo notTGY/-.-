@@ -1,0 +1,27 @@
+.cell {
+  width: 90px;
+  height: 90px;
+  outline: 2px solid #334324;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  margin: 5px;
+  padding: 5px;
+  display: inline-block;
+  overflow: auto;
+}
+
+.cell:focus-within, .cell:hover {
+  outline: 2px solid aqua;
+}
+
+.selected {
+  border: 2px solid red;
+}
+
+.input {
+  /* transform: rotate(-45deg); */
+}
+
+.input:disabled {
+  -webkit-text-fill-color: #555!important;
+}
