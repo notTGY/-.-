@@ -36,6 +36,9 @@ export function getStaticProps() {
     apps: [{
       title: 'Bingo',
       path: '/bingo',
+    }, {
+      title: 'Loto',
+      path: '/loto',
     }]
   }}
 }
