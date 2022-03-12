@@ -1,0 +1,23 @@
+<div id="root"></div>
+<script src="./index.js"></script>
+<script>
+let count = 0
+
+const App = () => {
+  console.log('render')
+  return [
+    {
+      elem: 'button',
+      text: '+1',
+      click: (e) => count++,
+    },
+    'current count: ',
+    count.toString(),
+  ]
+}
+
+
+const render = фреймворк(
+  document.getElementById('root'), App
+)
+</script>

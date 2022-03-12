@@ -62,7 +62,7 @@
   /**
    * Вот так происходит инициализация приложения
    */
-  const render = jstf(
+  const render = фреймворк(
     document.getElementById('root'), App
   )
   </script>
@@ -202,6 +202,6 @@
       }
     ]
   }
-  jstf(document.getElementById('root'), App)
+  фреймворк(document.getElementById('root'), App)
   </script>
 
