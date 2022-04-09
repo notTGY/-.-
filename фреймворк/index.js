@@ -1,4 +1,4 @@
-const фреймворк = (root, fn) => {
+const happyFramework = (root, fn) => {
   let prevJson = []
 
   const render = () => {
@@ -12,15 +12,14 @@ const фреймворк = (root, fn) => {
 
     root.innerHTML = ''
 
-    root.append(...json.map(
-      (child, i) => El(prevJson[i], child)
-    ))
+    root.append(El(prevJson, json))
 
     prevJson = json
   }
 
 
   const El = (prev, cur) => {
+    if (Array.isArray(cur)) cur = { children: cur }
     if (typeof cur === 'string') cur = { text: cur }
 
     cur.elem = cur.elem || 'div'
@@ -34,6 +33,11 @@ const фреймворк = (root, fn) => {
 
     const { $el, elem, text, value, className, children, ...handlers } = cur
 
+    const i = e => typeof e !== 'undefined'
+    if (i(text)) $el.innerText = text
+    if (i(value)) $el.value = value
+    if (i(className)) $el.className = className
+
     if (children)
       $el.append(...children.map((child, i) =>
         El(
@@ -41,12 +45,6 @@ const фреймворк = (root, fn) => {
           child
         )
       ))
-
-
-    const i = e => typeof e !== 'undefined'
-    if (i(text)) $el.innerText = text
-    if (i(value)) $el.value = value
-    if (i(className)) $el.className = className
 
     if (cur.cleanup) for (const k in cur.cleanup)
       $el.removeEventListener(k, cur.cleanup[k])

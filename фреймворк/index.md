@@ -62,7 +62,7 @@
   /**
    * Вот так происходит инициализация приложения
    */
-  const render = фреймворк(
+  const render = happyFramework(
     document.getElementById('root'), App
   )
   </script>
@@ -202,6 +202,70 @@
       }
     ]
   }
-  фреймворк(document.getElementById('root'), App)
+  happyFramework(document.getElementById('root'), App)
   </script>
+
+
+## поддержка JSX
+Конечно, не рекомендуется пользоваться импортными технологиями, но если очень хочется, то можно.
+Чтобы добавить поддержку jsx в счастливый фреймворк нужно:
+
+1. Подключить файл [jsx.js](./jsx.js).
+2. Инициализировать проект с помощью `npm init`.
+3. Скачать зарубежный [babel](https://babeljs.io) `npm install --save-dev @babel/core @babel/cli`.
+4. Скачать к нему плагин `npm install --save-dev @babel/preset-react`.
+5. Добавить в проект файл [babel.config.json](./babel/babel.config.json).
+6. В `package.json` нужно добавить скрипт для компиляции `babel <входная папка> -d <выходная папка>`.
+7. Для сборки придётся запускать этот скрипт.
+
+Всё довольно просто :)
+
+После этого можно спокойно писать jsx. Вот так будет выглядеть изменённая версия счётчика:
+
+  let count = 0
+  
+  const Button = ({ click }) => <button click={click}>+1</button>
+    
+  const App = () => {
+    console.log('render')
+    
+    return (
+      <>
+        <Button click={(e) => count++}/>
+        current count:{' '}
+        {count.toString()}
+      </>
+    )
+  }
+  
+  
+  const render = happyFramework(
+    document.getElementById('root'), App
+  )
+
+При помощи jsx'а также можно передавать параметры в компонент в традиционной манере.
+То есть, на примере `Button` можно понять, что атрибуты передаются как ключи первого параметра функции.
+Кроме того, туда будут передаваться дети как `children`
+
+так что можно сделать вот так:
+
+  const Wrapper = ({ children }) => {
+    const jsx = <menu>yo{children}</menu>
+    return jsx
+  }
+  
+  const App = () => (
+    <>
+      <Wrapper>
+        <button>a</button>
+        <button>b</button>
+        <button>c</button>
+      </Wrapper>
+    </>
+  )
+  
+  const render = happyFramework(
+    document.getElementById('root'), App
+  )
+
 
