@@ -76,7 +76,7 @@
   /**
    * Вот так происходит инициализация приложения
    */
-  const render = фреймворк(
+  const render = happyFramework(
     document.getElementById('root'), App
   )
   &lt;/script></pre>
@@ -260,7 +260,80 @@ eventName
       }
     ]
   }
-  фреймворк(document.getElementById('root'), App)
+  happyFramework(document.getElementById('root'), App)
   &lt;/script></pre>
+
+<h2>
+поддержка JSX
+</h2>
+<p>
+Конечно, не рекомендуется пользоваться импортными технологиями, но если очень хочется, то можно.
+Чтобы добавить поддержку jsx в счастливый фреймворк нужно:</p>
+
+<ol>
+<li>Подключить файл <a href="./jsx.js">jsx.js</a>.</li>
+<li>Инициализировать проект с помощью <code>npm init</code>.</li>
+<li>Скачать зарубежный <a href="https://babeljs.io">babel</a> <code>npm install --save-dev @babel/core @babel/cli</code>.</li>
+<li>Скачать к нему плагин <code>npm install --save-dev @babel/preset-react</code>.</li>
+<li>Добавить в проект файл <a href="./babel/babel.config.json">babel.config.json</a>.</li>
+<li>В <code>package.json</code> нужно добавить скрипт для компиляции <code>babel &lt;входная папка> -d &lt;выходная папка></code>.</li>
+<li>Для сборки придётся запускать этот скрипт.</li>
+</ol>
+
+<p>
+Всё довольно просто :)</p>
+
+<p>
+После этого можно спокойно писать jsx. Вот так будет выглядеть изменённая версия счётчика:</p>
+
+<pre>
+  let count = 0
+  
+  const Button = ({ click }) => &lt;button click={click}>+1&lt;/button>
+    
+  const App = () => {
+    console.log('render')
+    
+    return (
+      &lt;>
+        &lt;Button click={(e) => count++}/>
+        current count:{' '}
+        {count.toString()}
+      &lt;/>
+    )
+  }
+  
+  
+  const render = happyFramework(
+    document.getElementById('root'), App
+  )</pre>
+
+<p>
+При помощи jsx'а также можно передавать параметры в компонент в традиционной манере.
+То есть, на примере <code>Button</code> можно понять, что атрибуты передаются как ключи первого параметра функции.
+Кроме того, туда будут передаваться дети как <code>children</code></p>
+
+<p>
+так что можно сделать вот так:</p>
+
+<pre>
+  const Wrapper = ({ children }) => {
+    const jsx = &lt;menu>yo{children}&lt;/menu>
+    return jsx
+  }
+  
+  const App = () => (
+    &lt;>
+      &lt;Wrapper>
+        &lt;button>a&lt;/button>
+        &lt;button>b&lt;/button>
+        &lt;button>c&lt;/button>
+      &lt;/Wrapper>
+    &lt;/>
+  )
+  
+  const render = happyFramework(
+    document.getElementById('root'), App
+  )</pre>
 
 </article>
